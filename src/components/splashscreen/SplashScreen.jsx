@@ -52,6 +52,46 @@ function SplashScreen() {
     [handleSearchSubmit]
   );
 
+  const testProxy = () => {
+    // 1. Get the BASE URL of your proxy from the .env file
+    const proxyBaseUrl = import.meta.env.VITE_PROXY_URL;
+
+    // Check if the variable is set
+    if (!proxyBaseUrl) {
+      alert("Proxy URL is not configured. Please set VITE_PROXY_URL in your .env.local file.");
+      console.error("VITE_PROXY_URL is not set.");
+      return;
+    }
+
+    // 2. The external website you want to fetch
+    const targetUrl = 'https://www.google.com';
+
+    // 3. Construct the full URL correctly
+    const fullProxyRequestUrl = `${proxyBaseUrl}/?url=${encodeURIComponent(targetUrl)}`;
+
+    console.log("Making request to:", fullProxyRequestUrl);
+
+    // 4. Make the fetch request
+    fetch(fullProxyRequestUrl)
+      .then(response => {
+        if (!response.ok) {
+          // Try to get more details from the error response
+          return response.text().then(text => {
+            throw new Error(`Network response was not ok: ${text}`);
+          });
+        }
+        return response.text();
+      })
+      .then(html => {
+        console.log('Successfully fetched content via proxy!');
+        alert('Proxy test successful! Check console for details.');
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Proxy test failed: ' + error.message);
+      });
+  };
+
   return (
     <div className="w-full">
       <div className="w-[1300px] mx-auto pt-12 relative overflow-hidden max-[1350px]:w-full max-[1350px]:px-8 max-[1200px]:pt-8 max-[1200px]:min-h-fit max-[780px]:px-4 max-[520px]:px-0 max-[520px]:pt-6">
@@ -151,7 +191,7 @@ function SplashScreen() {
                 </span>
               ))}
             </div>
-            <div className="mt-8 flex max-[780px]:left-10">
+            <div className="mt-8 flex flex-col gap-4 max-[780px]:left-10">
               <Link to="/home" className="max-[520px]:w-full">
                 <div className="bg-[#FFBADE] text-black py-4 px-10 rounded-xl font-bold text-[20px] max-[520px]:text-center max-[520px]:font-medium max-[520px]:text-[17px]">
                   Watch anime
@@ -161,6 +201,12 @@ function SplashScreen() {
                   />
                 </div>
               </Link>
+              <button
+                onClick={testProxy}
+                className="bg-[#FFBADE] text-black py-4 px-10 rounded-xl font-bold text-[20px] max-[520px]:text-center max-[520px]:font-medium max-[520px]:text-[17px]"
+              >
+                Test Proxy
+              </button>
             </div>
           </div>
           <div className="h-full w-[600px] absolute right-0 max-[780px]:hidden">

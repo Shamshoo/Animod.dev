@@ -16,9 +16,39 @@ function Home() {
   if (homeInfoLoading) return <Loader type="home" />;
   if (error) return <Error />;
   if (!homeInfo) return <Error error="404" />;
+
+  const testProxy = () => {
+    // 1. The URL of your deployed proxy on Vercel
+    const proxyUrl = 'https://your-proxyapi-name.vercel.app'; // <--- REPLACE THIS
+
+    // 2. The external website you want to fetch
+    const targetUrl = 'https://www.google.com';
+
+    // 3. Make the request to your proxy, passing the target as a query parameter
+    fetch(`${proxyUrl}/?url=${encodeURIComponent(targetUrl)}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text(); // Get the HTML as text
+      })
+      .then(html => {
+        console.log('Successfully fetched content via proxy!');
+        // You can now do something with the fetched HTML
+        // For example, display it in a div (though this can be risky - use with caution)
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
+
   return (
     <>
       <div className="px-4 w-full max-[1200px]:px-0">
+        <div className="App" style={{ margin: '20px' }}>
+          <h1>Proxy Test</h1>
+          <button onClick={testProxy} style={{ backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px' }}>Test the Proxy</button>
+        </div>
         <Spotlight spotlights={homeInfo.spotlights} />
         <ContinueWatching />
         <Trending trending={homeInfo.trending} />

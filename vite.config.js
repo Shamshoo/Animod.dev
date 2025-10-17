@@ -10,8 +10,8 @@ export default defineConfig({
     },
   },
   server: {
-    // Allow all subdomains of pinggy.link
+    // Allow all subdomains of trycloudflare.com and animod.dev
     // This is more secure than allowing all hosts ('*')
-    allowedHosts: ['.pinggy.link', '.trycloudflare.com'],
+    allowedHosts: ['.trycloudflare.com', 'animod.dev'],
   },
 })

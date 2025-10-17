@@ -67,7 +67,6 @@ export default function Player({
   const leftAtRef = useRef(0);
   const boundKeydownRef = useRef(null);
   const proxy = import.meta.env.VITE_PROXY_URL;
-  const m3u8proxy = import.meta.env.VITE_M3U8_PROXY_URL?.split(",") || [];
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(
     episodes?.findIndex((episode) => episode.id.match(/ep=(\d+)/)?.[1] === episodeId)
   );
@@ -271,11 +270,7 @@ export default function Player({
     }
 
     const art = new Artplayer({
-      url:
-        m3u8proxy[Math.floor(Math.random() * m3u8proxy?.length)] +
-        encodeURIComponent(streamUrl) +
-        "&headers=" +
-        encodeURIComponent(JSON.stringify(headers)),
+      url: `${proxy}/?url=${encodeURIComponent(streamUrl)}`,
       container: artRef.current,
       type: "m3u8",
       autoplay: autoPlay,
@@ -487,8 +482,7 @@ export default function Player({
 
       for (const sub of subs) {
         const encodedUrl = encodeURIComponent(sub.file);
-        const encodedHeaders = encodeURIComponent(JSON.stringify(headers));
-        sub.file = `${proxy}${encodedUrl}&headers=${encodedHeaders}`;
+        sub.file = `${proxy}/?url=${encodedUrl}`;
       }
 
       const defaultSubtitle = subs?.find((sub) => sub.label.toLowerCase() === "english");

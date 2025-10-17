@@ -270,7 +270,7 @@ export default function Player({
     }
 
     const art = new Artplayer({
-      url: `${proxy}/?url=${encodeURIComponent(streamUrl)}`,
+      url: streamUrl,
       container: artRef.current,
       type: "m3u8",
       autoplay: autoPlay,
@@ -479,11 +479,6 @@ export default function Player({
       }, 2000);
 
       const subs = (subtitles || []).map((s) => ({ ...s }));
-
-      for (const sub of subs) {
-        const encodedUrl = encodeURIComponent(sub.file);
-        sub.file = `${proxy}/?url=${encodedUrl}`;
-      }
 
       const defaultSubtitle = subs?.find((sub) => sub.label.toLowerCase() === "english");
       if (defaultSubtitle) {

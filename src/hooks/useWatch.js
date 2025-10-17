@@ -220,25 +220,59 @@ export const useWatch = (animeId, initialEpisodeId) => {
       try {
         const server = servers.find((srv) => srv.data_id === activeServerId);
         if (server) {
-          const data = await getStreamInfo(
+          const originalData = await getStreamInfo(
             animeId,
             episodeId,
             server.serverName.toLowerCase()==="hd-3"?"hd-1":server.serverName.toLowerCase(),
             server.type.toLowerCase()
           );
-          setStreamInfo(data);
-          setStreamUrl(data?.streamingLink?.link?.file || null);
-          setIntro(data?.streamingLink?.intro || null);
-          setOutro(data?.streamingLink?.outro || null);
-          const subtitles =
-            data?.streamingLink?.tracks
-              ?.filter((track) => track.kind === "captions")
-              .map(({ file, label }) => ({ file, label })) || [];
-          setSubtitles(subtitles);
-          const thumbnailTrack = data?.streamingLink?.tracks?.find(
-            (track) => track.kind === "thumbnails" && track.file
-          );
-          if (thumbnailTrack) setThumbnail(thumbnailTrack.file);
+
+          // 2. Get the proxy URL from our environment variables
+          const proxyBaseUrl = import.meta.env.VITE_PROXY_URL;
+
+          // 3. If there's no proxy configured, use original data
+          if (!proxyBaseUrl) {
+            setStreamInfo(originalData);
+            setStreamUrl(originalData?.streamingLink?.link?.file || null);
+            setIntro(originalData?.streamingLink?.intro || null);
+            setOutro(originalData?.streamingLink?.outro || null);
+            const subtitles =
+              originalData?.streamingLink?.tracks
+                ?.filter((track) => track.kind === "captions")
+                .map(({ file, label }) => ({ file, label })) || [];
+            setSubtitles(subtitles);
+            const thumbnailTrack = originalData?.streamingLink?.tracks?.find(
+              (track) => track.kind === "thumbnails" && track.file
+            );
+            if (thumbnailTrack) setThumbnail(thumbnailTrack.file);
+            console.warn("Proxy URL not configured. Player may fail due to CORS.");
+          } else {
+            // 4. Rewrite the URLs with proxy
+            const proxiedData = { ...originalData };
+            if (proxiedData.streamingLink?.link?.file) {
+              proxiedData.streamingLink.link.file = `${proxyBaseUrl}/?url=${encodeURIComponent(proxiedData.streamingLink.link.file)}`;
+            }
+            if (proxiedData.streamingLink?.tracks) {
+              proxiedData.streamingLink.tracks = proxiedData.streamingLink.tracks.map(track => ({
+                ...track,
+                file: track.file ? `${proxyBaseUrl}/?url=${encodeURIComponent(track.file)}` : track.file
+              }));
+            }
+
+            setStreamInfo(proxiedData);
+            setStreamUrl(proxiedData?.streamingLink?.link?.file || null);
+            setIntro(proxiedData?.streamingLink?.intro || null);
+            setOutro(proxiedData?.streamingLink?.outro || null);
+            const subtitles =
+              proxiedData?.streamingLink?.tracks
+                ?.filter((track) => track.kind === "captions")
+                .map(({ file, label }) => ({ file, label })) || [];
+            setSubtitles(subtitles);
+            const thumbnailTrack = proxiedData?.streamingLink?.tracks?.find(
+              (track) => track.kind === "thumbnails" && track.file
+            );
+            if (thumbnailTrack) setThumbnail(thumbnailTrack.file);
+          }
         } else {
           setError("No server found with the activeServerId.");
         }

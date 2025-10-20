@@ -1,119 +1,277 @@
-<p align="center">
-  <div align="center">
-    <a href="https://zenime.site/">
-      <img alt="AnimeHi" src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/logo.png" width="220"/>
-    </a>
-  </div>
-    <h3 align="center">Zenime - Ad free anime streaming platform</h3>
-    <p align="center">
-  <a href="https://github.com/itzzzme/zenime">
-      <img src="https://img.shields.io/github/stars/itzzzme/zenime" alt="Github Stars">
-    </a>
-      <img src="https://img.shields.io/github/issues/itzzzme/zenime" alt="Github Issues">
-     <a href="https://github.com/itzzzme/zenime">
-      <img src="https://img.shields.io/github/forks/itzzzme/zenime" alt="Github Forks" />
-    </a>
-</p>
-</p>
-<p align="center">
-    <a href="https://zenime.site">Zenime</a> is an open-source anime streaming service that uses <a href="https://github.com/itzzzme/anime-api">custom</a> API, built using ReactJS with javascript and Tailwind CSS. It lets you easily find any anime with intuitive search & suggestion feature and stream without any ads.
- </p>
+<div align="center">
 
-<details>
-<summary>View more Features</summary>
+# 🎬 Animod
 
-### General
+### *Modern Anime Streaming Platform*
 
-- Sub Anime support
-- Dub Anime support
-- User-friendly interface
-- Mobile responsive
-- Fast page load
-- Character & Voice Actors
+[![Stars](https://img.shields.io/github/stars/itzzzme/zenime?style=for-the-badge&logo=github&color=888888&labelColor=1a1a1a)](https://github.com/itzzzme/zenime)
+[![Forks](https://img.shields.io/github/forks/itzzzme/zenime?style=for-the-badge&logo=github&color=888888&labelColor=1a1a1a)](https://github.com/itzzzme/zenime)
+[![Issues](https://img.shields.io/github/issues/itzzzme/zenime?style=for-the-badge&logo=github&color=888888&labelColor=1a1a1a)](https://github.com/itzzzme/zenime)
+[![License](https://img.shields.io/github/license/itzzzme/zenime?style=for-the-badge&color=888888&labelColor=1a1a1a)](https://github.com/itzzzme/zenime)
 
-### Watch Page
+**[🌐 Live Demo](https://animod.site)** • **[📖 Documentation](#installation)** • **[🐛 Report Bug](https://github.com/itzzzme/zenime/issues)** • **[✨ Request Feature](https://github.com/itzzzme/zenime/issues)**
 
-- Related Animes
-- Recommended Animes
-- Available seasons
-- Estimated schedule of upcoming episodes
-- **Player**
-  - Autoplay
-  - Autoskip intro/outro
-  - Autonext
+---
+
+</div>
+
+## 🎯 About
+
+**Animod** is a sleek, modern, and completely **ad-free** anime streaming platform built with cutting-edge web technologies. Experience seamless anime streaming with a beautiful black-themed UI, blazing-fast performance, and zero interruptions.
+
+### 💎 Why Animod?
+
+```
+✨ Zero Ads           🎨 Modern UI          ⚡ Lightning Fast
+🎭 Sub & Dub          📱 Mobile Ready       🔍 Smart Search
+🎬 HD Streaming       🌙 Dark Theme         🚀 Open Source
+```
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎭 Content
+- ✅ **Sub & Dub Support**
+- ✅ **HD Quality Streaming**
+- ✅ **Extensive Anime Library**
+- ✅ **Character & Voice Actors Info**
+- ✅ **Related & Recommended Anime**
+- ✅ **Season Navigation**
+
+</td>
+<td width="50%">
+
+### 🎮 Player Features
+- ✅ **Auto Play Next Episode**
+- ✅ **Auto Skip Intro/Outro**
+- ✅ **Multiple Quality Options**
+- ✅ **Keyboard Shortcuts**
+- ✅ **Episode Schedule Tracker**
+- ✅ **Continue Watching**
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🎨 UI/UX
+- ✅ **Modern Dark Theme**
+- ✅ **Fully Responsive Design**
+- ✅ **Intuitive Search**
+- ✅ **Smart Suggestions**
+- ✅ **Fast Page Load**
+- ✅ **Smooth Animations**
+
+</td>
+<td width="50%">
+
+### 🔧 Technical
+- ✅ **React 18**
+- ✅ **Tailwind CSS**
+- ✅ **Custom API**
+- ✅ **PWA Ready**
+- ✅ **SEO Optimized**
+- ✅ **Zero Ads**
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+![React](https://img.shields.io/badge/React-1a1a1a?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JavaScript](https://img.shields.io/badge/JavaScript-1a1a1a?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-1a1a1a?style=for-the-badge&logo=tailwind-css&logoColor=06B6D4)
+![Vite](https://img.shields.io/badge/Vite-1a1a1a?style=for-the-badge&logo=vite&logoColor=646CFF)
+![Vercel](https://img.shields.io/badge/Vercel-1a1a1a?style=for-the-badge&logo=vercel&logoColor=white)
+
+</div>
+
+---
+
+## 📸 Screenshots
+
+<details open>
+<summary><b>🖼️ Click to view screenshots</b></summary>
+<br/>
+
+### 🏠 Home Page
+<img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/homepage.webp" alt="Home Page" width="100%">
+
+### 📺 Watch Page
+<img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/watchpage.webp" alt="Watch Page" width="100%">
+
+### ℹ️ Anime Info Page
+<img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/animeinfo.webp" alt="Anime Info" width="100%">
+
+### 🔍 Search Feature
+<img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/searchbar.webp" alt="Search" width="100%">
+
+### 🎭 Characters & Voice Actors
+<img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/voiceactors.webp" alt="Voice Actors" width="100%">
 
 </details>
 
-## Previews
+---
 
-<div style="text-align: left;">
-  <img src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/homepage.webp" alt="Home Page" style="max-width: 80%;" >
-  <details>
-  <summary style="margin-top:10px">View more screenshots</summary>
-  <br/>
-  AnimeInfo Page
-  <img style="margin-top:10px" src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/animeinfo.webp" alt="AnimeInfo Page" style="max-width: 80%;">
-  <br/>
-  Searchbar
-  <img style="margin-top:10px" src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/searchbar.webp" alt="Searchbar" style="max-width: 50%;">
-  <br/>
-  Character & Voice Actors
-  <img style="margin-top:10px" src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/voiceactors.webp" alt="Character & Voice Actors" style="max-width: 80%;">
-  <br/>
-  Watch Page
-  <img style="margin-top:10px" src="https://raw.githubusercontent.com/itzzzme/zenime/refs/heads/main/public/watchpage.webp" alt="Watch Page" style="max-width: 80%;">
-  <br/>
-  </details>
-</div>
+## 🚀 Quick Start
 
-## Installation and Local Development
+### Prerequisites
 
-### 1. Make sure you have node installed on your device
+- Node.js 16+ installed
+- npm or yarn package manager
 
-### 2. Run the following code to clone the repository and install all required dependencies
+### Installation
 
 ```bash
+# Clone the repository
 git clone https://github.com/itzzzme/zenime.git
+
+# Navigate to project directory
 cd zenime
-npm install # or yarn
+
+# Install dependencies
+npm install
+# or
+yarn install
 ```
 
-### 3. Refer the <a href="https://github.com/itzzzme/zenime/blob/main/.env.example">.env.example</a> to set your .env file up
+### Environment Setup
 
-## Start the server
+Create a `.env` file in the root directory:
+
+```env
+# Refer to .env.example for all required variables
+VITE_API_URL=your_api_url
+VITE_PROXY_URL=your_proxy_url
+```
+
+### Development
 
 ```bash
-npm start # or npm run dev (to run develepment server)
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
-## Live Deployment
 
-### Vercel
+Your app will be running at `http://localhost:5173` 🎉
+---
 
-Host your own instance of <a href="https://zenime.site">Zenime</a>  on vercel
+## 🌐 Deployment
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/itzzzme/zenime)
+<div align="center">
 
-### Render
+### Deploy your own instance in one click!
 
-Host your own instance of <a href="https://zenime.site">Zenime</a> on Render.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/itzzzme/zenime)
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/itzzzme/zenime)
 
-### Pull Requests
+</div>
 
-- Pull requests are welcomed that address bug fixes, improvements, or new features.
-- Fork the repository and create a new branch for your changes.
-- Ensure your code follows our coding standards.
-- Include tests if applicable.
-- Describe your changes clearly in the pull request, explaining the problem and solution.
+### Manual Deployment
 
- ### Reporting Issues
+```bash
+# Build the project
+npm run build
 
-If you discover any issues or have suggestions for improvement, please open an issue. Provide a clear and concise description of the problem, steps to reproduce it, and any relevant information about your environment.
+# The dist folder contains your production-ready files
+# Deploy the dist folder to your preferred hosting service
+```
 
-### Support
+---
 
- If you like the project feel free to drop a star ✨. Your appreciation means a lot.
+## 🤝 Contributing
 
-<p align="center" style="text-decoration: none;">Made by <a href="https://github.com/itzzzme" tarGET="_blank">itzzzme 
-</a>🫰</p>
+Contributions are what make the open-source community amazing! Any contributions you make are **greatly appreciated**.
+
+<details>
+<summary><b>How to Contribute</b></summary>
+
+1. **Fork the Project**
+2. **Create your Feature Branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. **Commit your Changes**
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+4. **Push to the Branch**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. **Open a Pull Request**
+
+### Coding Standards
+- Follow existing code style
+- Write meaningful commit messages
+- Add comments for complex logic
+- Test your changes thoroughly
+
+</details>
+
+---
+
+## 🐛 Bug Reports & Feature Requests
+
+Found a bug or have a feature idea? We'd love to hear from you!
+
+- 🐛 [Report a Bug](https://github.com/itzzzme/zenime/issues/new?labels=bug)
+- ✨ [Request a Feature](https://github.com/itzzzme/zenime/issues/new?labels=enhancement)
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+## 💖 Support
+
+<div align="center">
+
+If you find this project helpful, please consider giving it a ⭐!
+
+**Your support means everything!**
+
+[![Star History Chart](https://api.star-history.com/svg?repos=itzzzme/zenime&type=Date&theme=dark)](https://star-history.com/#itzzzme/zenime&Date)
+
+</div>
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+**Made with ❤️ by [itzzzme](https://github.com/itzzzme)**
+
+[![GitHub](https://img.shields.io/badge/GitHub-1a1a1a?style=for-the-badge&logo=github&logoColor=white)](https://github.com/itzzzme)
+
+</div>
+
+---
+
+<div align="center">
+
+### ⚡ Powered by Open Source
+
+**[⬆ Back to Top](#-animod)**
+
+</div>

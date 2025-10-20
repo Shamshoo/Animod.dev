@@ -13,7 +13,6 @@ import Sidebar from "../sidebar/Sidebar";
 import { SearchProvider } from "@/src/context/SearchContext";
 import WebSearch from "../searchbar/WebSearch";
 import MobileSearch from "../searchbar/MobileSearch";
-import { FaTelegramPlane } from "react-icons/fa";
 
 function Navbar() {
   const location = useLocation();
@@ -79,7 +78,7 @@ function Navbar() {
           <div className="flex gap-x-6 items-center w-fit">
             <FontAwesomeIcon
               icon={faBars}
-              className="text-2xl text-white mt-1 cursor-pointer"
+              className="text-2xl text-[#888888] hover:text-white transition-colors mt-1 cursor-pointer"
               onClick={handleHamburgerClick}
             />
             <Link

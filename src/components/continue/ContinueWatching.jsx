@@ -40,8 +40,8 @@ const ContinueWatching = () => {
     <div className="mt-6 max-[1200px]:px-6 max-md:px-0">
       <div className="flex items-center justify-between max-md:pl-4">
         <div className="flex items-center gap-x-2 justify-center">
-          <FaHistory className="text-[#ffbade]" />
-          <h1 className="text-[#ffbade] text-2xl font-bold max-[450px]:text-xl max-[450px]:mb-1 max-[350px]:text-lg">
+          <FaHistory className="text-[#888888]" />
+          <h1 className="text-[#888888] text-2xl font-bold max-[450px]:text-xl max-[450px]:mb-1 max-[350px]:text-lg">
             Continue Watching
           </h1>
         </div>
@@ -80,7 +80,7 @@ const ContinueWatching = () => {
               key={index}
               className="text-center flex justify-center items-center"
             >
-              <div className="w-full h-auto pb-[140%] relative inline-block overflow-hidden">
+              <div className="w-full h-auto pb-[140%] relative inline-block overflow-hidden rounded-xl">
                 <button
                   className="absolute top-2 right-2 bg-black text-white px-3 py-2 bg-opacity-60 rounded-full text-sm z-10 font-extrabold hover:bg-white hover:text-black transition-all"
                   onClick={() => removeFromWatchList(item.episodeId)}
@@ -90,12 +90,13 @@ const ContinueWatching = () => {
 
                 <Link
                   to={`/playing/${item?.id}?ep=${item.episodeId}`}
-                  className="inline-block bg-[#2a2c31] absolute left-0 top-0 w-full h-full group"
+                  className="inline-block bg-[#1a1a1a] absolute left-0 top-0 w-full h-full group hover:scale-105 transition-transform duration-300 ease-out"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                   <img
                     src={`https://wsrv.nl/?url=${item?.poster}`}
                     alt={item?.title}
-                    className="block w-full h-full object-cover transition-all duration-300 ease-in-out group-hover:blur-[4px]"
+                    className="block w-full h-full object-cover"
                     title={item?.title}
                     loading="lazy"
                   />
@@ -111,7 +112,7 @@ const ContinueWatching = () => {
                     18+
                   </div>
                 )}
-                <div className="absolute bottom-0 left-0 flex flex-col gap-y-2 right-0 p-2 bg-gradient-to-t from-black via-black/80 to-transparent max-[450px]:gap-y-1">
+                <div className="absolute bottom-0 left-0 flex flex-col gap-y-2 right-0 p-3 max-[450px]:gap-y-1">
                   <p className="text-white text-md font-bold text-left truncate max-[450px]:text-sm">
                     {language === "EN"
                       ? item?.title

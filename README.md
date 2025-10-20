@@ -15,7 +15,7 @@
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-20232A?style=flat-square&logo=tailwind-css&logoColor=06B6D4)
 ![Vite](https://img.shields.io/badge/Vite-20232A?style=flat-square&logo=vite&logoColor=646CFF)
 
-[Live Demo](https://animod.site) · [Report Bug](https://github.com/itzzzme/zenime/issues) · [Request Feature](https://github.com/itzzzme/zenime/issues)
+[Live Demo](https://animod.dev) 
 
 </div>
 

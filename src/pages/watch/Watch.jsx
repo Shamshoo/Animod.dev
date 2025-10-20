@@ -374,6 +374,7 @@ export default function Watch() {
                   currentEpisode={episodeId}
                   onEpisodeClick={(id) => setEpisodeId(id)}
                   totalEpisodes={totalEpisodes}
+                  animeTitle={animeInfo?.title}
                 />
               )}
             </div>

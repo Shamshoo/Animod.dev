@@ -18,6 +18,7 @@ function Episodelist({
   onEpisodeClick,
   currentEpisode,
   totalEpisodes,
+  animeTitle,
 }) {
   const [activeEpisodeId, setActiveEpisodeId] = useState(currentEpisode);
   const { language } = useLanguage();
@@ -35,46 +36,104 @@ function Episodelist({
   // Fetch TMDB episode thumbnails
   useEffect(() => {
     const fetchTMDBThumbnails = async () => {
-      // Extract anime name from first episode title or use a default
-      if (episodes && episodes.length > 0) {
-        try {
-          const animeTitle = episodes[0]?.title?.split(' - ')[0] || '';
-          const TMDB_API_KEY = 'c7a51b4c64b938c993f179f867f2f7b3';
-          
-          // Search for the anime on TMDB
-          const searchResponse = await fetch(
-            `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(animeTitle)}`
+      if (!animeTitle) {
+        console.log('No anime title provided for TMDB fetch');
+        return;
+      }
+      
+      try {
+        const TMDB_API_KEY = 'c7a51b4c64b938c993f179f867f2f7b3';
+        console.log('Searching TMDB for:', animeTitle);
+        
+        // Try searching with original title first
+        let searchResponse = await fetch(
+          `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(animeTitle)}`
+        );
+        let searchData = await searchResponse.json();
+        console.log('TMDB search results (original):', searchData);
+        
+        // Filter results to find animation/anime (genre_ids: 16 is Animation)
+        let selectedShow = null;
+        
+        if (searchData.results && searchData.results.length > 0) {
+          // Try to find a show with Animation genre (genre_id: 16)
+          selectedShow = searchData.results.find(show => 
+            show.genre_ids && show.genre_ids.includes(16)
           );
-          const searchData = await searchResponse.json();
+          
+          // If no animation found, use first result
+          if (!selectedShow) {
+            selectedShow = searchData.results[0];
+          }
+        }
+        
+        // If no results, try with 'anime' keyword
+        if (!selectedShow) {
+          console.log('No results found, trying with "anime" keyword...');
+          searchResponse = await fetch(
+            `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(animeTitle + ' anime')}`
+          );
+          searchData = await searchResponse.json();
+          console.log('TMDB search results (with anime):', searchData);
           
           if (searchData.results && searchData.results.length > 0) {
-            const tvId = searchData.results[0].id;
-            
-            // Fetch season 1 episodes (you can adjust season number as needed)
-            const episodesResponse = await fetch(
-              `https://api.themoviedb.org/3/tv/${tvId}/season/1?api_key=${TMDB_API_KEY}`
-            );
-            const episodesData = await episodesResponse.json();
-            
-            // Map episode numbers to thumbnail URLs
-            const thumbnails = {};
-            episodesData.episodes?.forEach((ep) => {
-              if (ep.still_path) {
-                thumbnails[ep.episode_number] = `https://image.tmdb.org/t/p/w300${ep.still_path}`;
-              }
-            });
-            setEpisodeThumbnails(thumbnails);
+            selectedShow = searchData.results.find(show => 
+              show.genre_ids && show.genre_ids.includes(16)
+            ) || searchData.results[0];
           }
-        } catch (error) {
-          console.error('Error fetching TMDB thumbnails:', error);
         }
+        
+        if (selectedShow) {
+          const tvId = selectedShow.id;
+          console.log('Found TV show ID:', tvId, 'Name:', selectedShow.name, 'Genres:', selectedShow.genre_ids);
+          
+          // Fetch all seasons to get episode count
+          const tvDetailsResponse = await fetch(
+            `https://api.themoviedb.org/3/tv/${tvId}?api_key=${TMDB_API_KEY}`
+          );
+          const tvDetails = await tvDetailsResponse.json();
+          const seasonCount = tvDetails.number_of_seasons || 1;
+          console.log('Total seasons:', seasonCount);
+          
+          // Fetch episodes from seasons (limit to first 30 seasons to avoid rate limits)
+          const thumbnails = {};
+          let episodeCounter = 1;
+          const maxSeasons = Math.min(seasonCount, 30);
+          
+          for (let season = 1; season <= maxSeasons; season++) {
+            try {
+              const episodesResponse = await fetch(
+                `https://api.themoviedb.org/3/tv/${tvId}/season/${season}?api_key=${TMDB_API_KEY}`
+              );
+              const episodesData = await episodesResponse.json();
+              
+              if (episodesData.episodes) {
+                episodesData.episodes.forEach((ep) => {
+                  if (ep.still_path) {
+                    thumbnails[episodeCounter] = `https://image.tmdb.org/t/p/w300${ep.still_path}`;
+                  }
+                  episodeCounter++;
+                });
+              }
+            } catch (seasonError) {
+              console.error(`Error fetching season ${season}:`, seasonError);
+            }
+          }
+          
+          console.log('Fetched thumbnails for', Object.keys(thumbnails).length, 'episodes out of', episodeCounter - 1, 'total');
+          setEpisodeThumbnails(thumbnails);
+        } else {
+          console.log('No TMDB results found for:', animeTitle);
+        }
+      } catch (error) {
+        console.error('Error fetching TMDB thumbnails:', error);
       }
     };
     
-    if (viewMode === 'thumbnail') {
+    if (viewMode === 'thumbnail' && animeTitle) {
       fetchTMDBThumbnails();
     }
-  }, [episodes, viewMode]);
+  }, [animeTitle, viewMode]);
 
   const scrollToActiveEpisode = () => {
     if (activeEpisodeRef.current && listContainerRef.current) {
@@ -275,7 +334,7 @@ function Episodelist({
       <div ref={listContainerRef} className="w-full h-full overflow-y-auto">
         <div
           className={`${
-            viewMode === "numbers" && totalEpisodes > 30
+            viewMode === "numbers"
               ? "p-3 grid grid-cols-5 gap-1 max-[1200px]:grid-cols-12 max-[860px]:grid-cols-10 max-[575px]:grid-cols-8 max-[478px]:grid-cols-6 max-[350px]:grid-cols-5"
               : viewMode === "thumbnail"
               ? "p-3 flex flex-col gap-2"
@@ -294,12 +353,13 @@ function Episodelist({
 
                   // Thumbnail View
                   if (viewMode === "thumbnail") {
-                    const thumbnail = episodeThumbnails[parseInt(episodeNumber)] || 'https://via.placeholder.com/300x170?text=No+Image';
+                    const sequentialEpNum = item?.episode_no || (index + selectedRange[0]);
+                    const thumbnail = episodeThumbnails[sequentialEpNum];
                     return (
                       <div
                         key={item?.id}
                         ref={isActive ? activeEpisodeRef : null}
-                        className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer ${
+                        className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer ${
                           item?.filler ? "border-2 border-yellow-500" : ""
                         } ${
                           isActive ? "bg-[#888888]" : "bg-[#1a1a1a] hover:bg-[#2a2a2a]"
@@ -312,10 +372,24 @@ function Episodelist({
                           }
                         }}
                       >
-                        <img src={thumbnail} alt={`Episode ${episodeNumber}`} className="w-20 h-12 object-cover rounded" />
-                        <div className="flex-1">
-                          <p className="text-xs font-semibold text-white">Episode {episodeNumber}</p>
-                          <p className="text-[10px] text-gray-400 line-clamp-1">{item?.title || 'No title'}</p>
+                        {thumbnail ? (
+                          <img 
+                            src={thumbnail} 
+                            alt={`Episode ${sequentialEpNum}`} 
+                            className="w-24 h-14 object-cover rounded flex-shrink-0 bg-[#2a2a2a]"
+                            onError={(e) => {
+                              console.log('Image load error for episode', sequentialEpNum);
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-24 h-14 bg-[#2a2a2a] rounded flex-shrink-0 flex items-center justify-center">
+                            <span className="text-[10px] text-gray-500">No Image</span>
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-white">Episode {sequentialEpNum}</p>
+                          <p className="text-[11px] text-gray-400 line-clamp-2">{item?.title || 'No title available'}</p>
                         </div>
                       </div>
                     );
@@ -323,6 +397,7 @@ function Episodelist({
                   
                   // Name View
                   if (viewMode === "name") {
+                    const sequentialEpNum = index + selectedRange[0];
                     return (
                       <div
                         key={item?.id}
@@ -340,8 +415,8 @@ function Episodelist({
                           }
                         }}
                       >
-                        <span className="text-xs font-bold min-w-[30px]">{episodeNumber}</span>
-                        <p className="text-xs line-clamp-1 flex-1">{item?.title || `Episode ${episodeNumber}`}</p>
+                        <span className="text-xs font-bold min-w-[30px]">{sequentialEpNum}</span>
+                        <p className="text-xs line-clamp-1 flex-1">{item?.title || `Episode ${sequentialEpNum}`}</p>
                       </div>
                     );
                   }
@@ -391,6 +466,91 @@ function Episodelist({
                   currentEpisode === episodeNumber;
                 const isSearched = searchedEpisode === item?.id;
 
+                // Thumbnail View
+                if (viewMode === "thumbnail") {
+                  const sequentialEpNum = item?.episode_no || (index + 1);
+                  const thumbnail = episodeThumbnails[sequentialEpNum];
+                  return (
+                    <div
+                      key={item?.id}
+                      ref={isActive ? activeEpisodeRef : null}
+                      className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer ${
+                        item?.filler ? "border-2 border-yellow-500" : ""
+                      } ${
+                        isActive ? "bg-[#888888]" : "bg-[#1a1a1a] hover:bg-[#2a2a2a]"
+                      } transition-colors`}
+                      onClick={() => {
+                        if (episodeNumber) {
+                          onEpisodeClick(episodeNumber);
+                          setActiveEpisodeId(episodeNumber);
+                          setSearchedEpisode(null);
+                        }
+                      }}
+                    >
+                      {thumbnail ? (
+                        <img 
+                          src={thumbnail} 
+                          alt={`Episode ${sequentialEpNum}`} 
+                          className="w-24 h-14 object-cover rounded flex-shrink-0 bg-[#2a2a2a]"
+                          onError={(e) => {
+                            console.log('Image load error for episode', sequentialEpNum);
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-24 h-14 bg-[#2a2a2a] rounded flex-shrink-0 flex items-center justify-center">
+                          <span className="text-[10px] text-gray-500">No Image</span>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-white">Episode {sequentialEpNum}</p>
+                        <p className="text-[11px] text-gray-400 line-clamp-2">{item?.title || 'No title available'}</p>
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // Numbers View
+                if (viewMode === "numbers") {
+                  return (
+                    <div
+                      key={item?.id}
+                      ref={isActive ? activeEpisodeRef : null}
+                      className={`flex items-center justify-center rounded-[3px] h-[30px] text-[13.5px] font-medium cursor-pointer group ${
+                        item?.filler
+                          ? isActive
+                            ? "bg-yellow-600"
+                            : "bg-yellow-700"
+                          : ""
+                      } md:hover:bg-[#67686F] 
+                          md:hover:text-white
+                       ${
+                         isActive && !item?.filler
+                           ? "bg-[#888888] text-white"
+                           : !item?.filler ? "bg-[#35373D] text-gray-400" : "text-white"
+                       } ${isSearched ? "glow-animation" : ""} `}
+                      onClick={() => {
+                        if (episodeNumber) {
+                          onEpisodeClick(episodeNumber);
+                          setActiveEpisodeId(episodeNumber);
+                          setSearchedEpisode(null);
+                        }
+                      }}
+                    >
+                      <span
+                        className={`${
+                          item?.filler
+                            ? "text-white md:group-hover:text-white"
+                            : ""
+                        }`}
+                      >
+                        {index + 1}
+                      </span>
+                    </div>
+                  );
+                }
+
+                // Name View (default)
                 return (
                   <div
                     key={item?.id}

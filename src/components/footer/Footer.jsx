@@ -7,13 +7,12 @@ function Footer() {
     <footer className="flex flex-col w-full mt-[100px] px-4 max-[500px]:px-0">
       <div
         style={{ borderBottom: "1px solid rgba(255, 255, 255, .075)" }}
-        className="w-full text-left max-[500px]:hidden"
+        className="w-full text-left py-6 max-[500px]:hidden"
       >
-        <img
-          src="https://i.postimg.cc/SsKY6Y9f/2H76i57.png"
-          alt={logoTitle}
-          className="w-[200px] h-[100px]"
-        />
+        <div className="text-4xl font-bold">
+          <span className="text-[#888888]">Ani</span>
+          <span className="text-white">mod</span>
+        </div>
       </div>
       <div className="flex py-5 flex-col w-full space-y-4 max-md:items-center max-[500px]:bg-[#373646]">
         <div className="flex w-fit items-center space-x-6 max-[500px]:hidden">
@@ -37,7 +36,7 @@ function Footer() {
             <Link
               to={`az-list/${item === "All" ? "" : item}`}
               key={index}
-              className="text-lg bg-[#373646] px-2 rounded-md font-bold hover:text-black hover:bg-[#FFBADE] hover:cursor-pointer transition-all ease-out"
+              className="text-lg bg-[#373646] px-2 rounded-md font-bold hover:text-white hover:bg-[#888888] hover:cursor-pointer transition-all ease-out"
             >
               {item}
             </Link>

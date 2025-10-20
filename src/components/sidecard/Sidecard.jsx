@@ -38,8 +38,8 @@ function Sidecard({ data, label, className, limit }) {
     useToolTipPosition(hoveredItem, data);
   return (
     <div className={`flex flex-col space-y-6 ${className}`}>
-      <h1 className="font-bold text-2xl text-[#ffbade]">{label}</h1>
-      <div className="flex flex-col space-y-4 bg-[#2B2A3C] p-4 pt-8">
+      <h1 className="font-bold text-lg text-white">{label}</h1>
+      <div className="flex flex-col space-y-4 bg-[#1a1a1a] p-4 pt-6 rounded-xl">
         {data &&
           displayedData.map((item, index) => (
             <div
@@ -75,7 +75,7 @@ function Sidecard({ data, label, className, limit }) {
                 <img
                   src={`${item.poster}`}
                   alt={item.title}
-                  className="flex-shrink-0 w-[60px] h-[75px] rounded-md object-cover cursor-pointer"
+                  className="flex-shrink-0 w-[60px] h-[75px] rounded-lg object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
                   onClick={() => navigate(`/watch/${item.id}`)}
                   onMouseEnter={() => handleMouseEnter(item, index)}
                   onMouseLeave={handleMouseLeave}
@@ -83,7 +83,7 @@ function Sidecard({ data, label, className, limit }) {
                 <div className="flex flex-col ml-4 space-y-2">
                   <Link
                     to={`/${item.id}`}
-                    className="text-[1em] font-[500] hover:cursor-pointer hover:text-[#ffbade] transform transition-all ease-out line-clamp-1 max-[478px]:line-clamp-2 max-[478px]:text-[14px]"
+                    className="text-[1em] font-[500] hover:cursor-pointer hover:text-gray-300 transform transition-colors duration-300 ease-out line-clamp-1 max-[478px]:line-clamp-2 max-[478px]:text-[14px]"
                     onClick={() =>
                       window.scrollTo({ top: 0, behavior: "smooth" })
                     }
@@ -92,7 +92,7 @@ function Sidecard({ data, label, className, limit }) {
                   </Link>
                   <div className="flex flex-wrap items-center w-fit space-x-1 max-[320px]:gap-y-2">
                     {item.tvInfo?.sub && (
-                      <div className="flex space-x-1 justify-center items-center bg-[#B0E3AF] rounded-[4px] px-[4px] text-black py-[2px]">
+                      <div className="flex space-x-1 justify-center items-center bg-[#B0E3AF] rounded-full px-2 text-black py-0.5">
                         <FontAwesomeIcon
                           icon={faClosedCaptioning}
                           className="text-[12px]"
@@ -103,7 +103,7 @@ function Sidecard({ data, label, className, limit }) {
                       </div>
                     )}
                     {item.tvInfo?.dub && (
-                      <div className="flex space-x-1 justify-center items-center bg-[#B9E7FF] rounded-[4px] px-[8px] text-black py-[2px]">
+                      <div className="flex space-x-1 justify-center items-center bg-[#B9E7FF] rounded-full px-2 text-black py-0.5">
                         <FontAwesomeIcon
                           icon={faMicrophone}
                           className="text-[12px]"
@@ -128,7 +128,7 @@ function Sidecard({ data, label, className, limit }) {
           ))}
         {!limit && data.length > 6 && (
           <button
-            className="w-full bg-[#555462d3] py-3 mt-4 hover:bg-[#555462] rounded-md font-bold transform transition-all ease-out"
+            className="w-full bg-[#2a2a2a] py-3 mt-4 hover:bg-white hover:text-black rounded-full font-semibold transform transition-all duration-300 ease-out hover:scale-105"
             onClick={toggleShowAll}
           >
             {showAll ? "Show less" : "Show more"}

@@ -16,8 +16,8 @@
   width: 40px;
   height: 40px;
   color: white;
-  background-color: #383747;
-  border-radius: 7px;
+  background-color: #2a2a2a;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,8 +26,9 @@
 }
 .button-prev:hover,
 .button-next:hover {
-  background-color: #ffbade;
-  color: #383747;
+  background-color: #ffffff;
+  color: #000000;
+  transform: scale(1.1);
 }
 
 .button-prev::after {

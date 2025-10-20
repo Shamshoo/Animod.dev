@@ -7,26 +7,26 @@ function Voiceactor({ animeInfo, className }) {
   return (
     <div className={`w-full mt-8 flex flex-col gap-y-4 ${className}`}>
       <div className="flex justify-between items-center">
-        <h1 className="font-bold text-2xl text-[#ffbade] max-[478px]:text-[18px] capitalize">
+        <h1 className="font-bold text-xl text-white max-[478px]:text-[18px] capitalize">
           Characters & Voice Actors
         </h1>
         <button className="flex w-fit items-baseline h-fit rounded-3xl gap-x-1 group">
           <p
-            className="text-white text-[12px] font-semibold h-fit leading-0"
+            className="text-gray-400 text-[12px] font-semibold h-fit leading-0 group-hover:text-white transition-colors"
             onClick={() => {
               setShowVoiceActors(true);
             }}
           >
             View more
           </p>
-          <FaChevronRight className="text-white text-[10px]" />
+          <FaChevronRight className="text-gray-400 text-[10px] group-hover:text-white transition-colors" />
         </button>
       </div>
       <div className="w-full grid grid-cols-3 max-[1024px]:grid-cols-2 max-[758px]:grid-cols-1 gap-4">
         {animeInfo.charactersVoiceActors.slice(0, 6).map((character, index) => (
           <div
             key={index}
-            className="flex justify-between items-center px-3 py-4 rounded-md bg-[#373646]"
+            className="flex justify-between items-center px-3 py-4 rounded-xl bg-[#1a1a1a] hover:bg-[#2a2a2a] transition-colors duration-300"
           >
             {character.character && (
               <div className="w-[50%] float-left overflow-hidden max-[350px]:w-[45%]">
@@ -39,7 +39,7 @@ function Voiceactor({ animeInfo, className }) {
                       onError={(e) => {
                         e.target.src = "https://i.postimg.cc/HnHKvHpz/no-avatar.jpg";
                       }}
-                      className="w-[45px] h-[45px] flex-shrink-0 rounded-full object-cover"
+                      className="w-[45px] h-[45px] flex-shrink-0 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                       loading="lazy"
                     />
                   )}
@@ -77,7 +77,7 @@ function Voiceactor({ animeInfo, className }) {
                       onError={(e) => {
                         e.target.src = "https://i.postimg.cc/HnHKvHpz/no-avatar.jpg";
                       }}
-                      className="w-[45px] h-[45px] rounded-full object-cover grayscale hover:grayscale-0 hover:cursor-pointer flex-shrink-0 transition-all duration-300 ease-in-out"
+                      className="w-[45px] h-[45px] rounded-full object-cover hover:scale-110 hover:cursor-pointer flex-shrink-0 transition-transform duration-300"
                     />
                   )}
                 </div>

@@ -23,16 +23,32 @@ function Navbar() {
   );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      const currentScrollY = window.scrollY;
+      
+      setIsScrolled(currentScrollY > 0);
+      
+      // Show navbar when scrolling up or at top
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        setIsVisible(true);
+      } 
+      // Hide navbar when scrolling down and past 100px
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
-    window.addEventListener("scroll", handleScroll);
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [lastScrollY]);
 
   const handleHamburgerClick = () => {
     setIsSidebarOpen(true);
@@ -55,11 +71,9 @@ function Navbar() {
   return (
     <SearchProvider>
       <nav
-        className={`fixed top-0 left-0 w-full h-16 z-[1000000] flex p-4 py-8 items-center justify-between transition-all duration-300 ease-in-out ${
-          isNotHomePage ? "bg-[#201F31]" : "bg-opacity-0"
-        } ${
-          isScrolled ? "bg-[#2D2B44] bg-opacity-90 backdrop-blur-md" : ""
-        } max-[600px]:h-fit max-[600px]:flex-col max-[1200px]:bg-opacity-100 max-[600px]:py-2`}
+        className={`fixed left-0 w-full h-16 z-[1000000] flex p-4 py-8 items-center justify-between transition-all duration-500 ease-in-out bg-[#0a0a0a] border-b border-[#1a1a1a] max-[600px]:h-fit max-[600px]:flex-col max-[600px]:py-2 ${
+          isVisible ? 'top-0' : '-top-20'
+        }`}
       >
         <div className="flex gap-x-6 items-center w-fit max-lg:w-full max-lg:justify-between">
           <div className="flex gap-x-6 items-center w-fit">
@@ -70,11 +84,10 @@ function Navbar() {
             />
             <Link
               to="/"
-              className="text-4xl font-bold max-[575px]:text-3xl cursor-pointer"
+              className="text-4xl font-bold max-[575px]:text-3xl cursor-pointer tracking-tight"
             >
-              {logoTitle.slice(0, 3)}
-              <span className="text-[#FFBADE]">{logoTitle.slice(3, 4)}</span>
-              {logoTitle.slice(4)}
+              <span className="text-[#888888]">Ani</span>
+              <span className="text-white">mod</span>
             </Link>
           </div>
           <WebSearch />
@@ -95,13 +108,13 @@ function Navbar() {
                   : item.path
               }
               onClick={item.path === "/random" ? handleRandomClick : undefined}
-              className="flex flex-col gap-y-1 items-center cursor-pointer"
+              className="flex flex-col gap-y-1 items-center cursor-pointer group"
             >
               <FontAwesomeIcon
                 icon={item.icon}
-                className="text-[#ffbade] text-xl font-bold"
+                className="text-[#888888] text-xl font-bold group-hover:text-white transition-colors"
               />
-              <p className="text-[15px]">{item.label}</p>
+              <p className="text-[15px] text-[#888888] group-hover:text-white transition-colors">{item.label}</p>
             </Link>
           ))}
           <div className="flex flex-col gap-y-1 items-center w-auto">
@@ -114,8 +127,8 @@ function Navbar() {
                     index === 0 ? "rounded-l-[3px]" : "rounded-r-[3px]"
                   } ${
                     language === lang
-                      ? "bg-[#ffbade] text-black"
-                      : "bg-gray-600 text-white"
+                      ? "bg-white text-black"
+                      : "bg-[#2a2a2a] text-white"
                   }`}
                 >
                   {lang}
@@ -126,16 +139,6 @@ function Navbar() {
               <p className="whitespace-nowrap text-[15px]">Anime name</p>
             </div>
           </div>
-          <Link
-            to="https://t.me/zenime_discussion"
-            className="flex flex-col gap-y-1 items-center cursor-pointer"
-          >
-            <FaTelegramPlane
-              // icon={faTelegram}
-              className="text-xl font-bold text-[#ffbade]"
-            />
-            <p className="text-[15px] mb-[1px] text-white">Join Telegram</p>
-          </Link>
         </div>
         <MobileSearch />
       </nav>

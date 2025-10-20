@@ -4,6 +4,9 @@ import {
   faCirclePlay,
   faList,
   faCheck,
+  faImage,
+  faFont,
+  faHashtag,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +29,52 @@ function Episodelist({
   const [episodeNum, setEpisodeNum] = useState(currentEpisode);
   const dropDownRef = useRef(null);
   const [searchedEpisode, setSearchedEpisode] = useState(null);
+  const [viewMode, setViewMode] = useState("numbers"); // thumbnail, name, numbers
+  const [episodeThumbnails, setEpisodeThumbnails] = useState({});
+
+  // Fetch TMDB episode thumbnails
+  useEffect(() => {
+    const fetchTMDBThumbnails = async () => {
+      // Extract anime name from first episode title or use a default
+      if (episodes && episodes.length > 0) {
+        try {
+          const animeTitle = episodes[0]?.title?.split(' - ')[0] || '';
+          const TMDB_API_KEY = 'c7a51b4c64b938c993f179f867f2f7b3';
+          
+          // Search for the anime on TMDB
+          const searchResponse = await fetch(
+            `https://api.themoviedb.org/3/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(animeTitle)}`
+          );
+          const searchData = await searchResponse.json();
+          
+          if (searchData.results && searchData.results.length > 0) {
+            const tvId = searchData.results[0].id;
+            
+            // Fetch season 1 episodes (you can adjust season number as needed)
+            const episodesResponse = await fetch(
+              `https://api.themoviedb.org/3/tv/${tvId}/season/1?api_key=${TMDB_API_KEY}`
+            );
+            const episodesData = await episodesResponse.json();
+            
+            // Map episode numbers to thumbnail URLs
+            const thumbnails = {};
+            episodesData.episodes?.forEach((ep) => {
+              if (ep.still_path) {
+                thumbnails[ep.episode_number] = `https://image.tmdb.org/t/p/w300${ep.still_path}`;
+              }
+            });
+            setEpisodeThumbnails(thumbnails);
+          }
+        } catch (error) {
+          console.error('Error fetching TMDB thumbnails:', error);
+        }
+      }
+    };
+    
+    if (viewMode === 'thumbnail') {
+      fetchTMDBThumbnails();
+    }
+  }, [episodes, viewMode]);
 
   const scrollToActiveEpisode = () => {
     if (activeEpisodeRef.current && listContainerRef.current) {
@@ -139,7 +188,32 @@ function Episodelist({
   return (
     <div className="relative flex flex-col w-full h-full max-[1200px]:max-h-[500px]">
       <div className="sticky top-0 z-10 flex flex-col gap-y-[5px] justify-start px-3 py-4 bg-[#0D0D15]">
-        <h1 className="text-[13px] font-bold">List of episodes:</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-[13px] font-bold">List of episodes:</h1>
+          <div className="flex gap-x-1">
+            <button
+              onClick={() => setViewMode("thumbnail")}
+              className={`p-1.5 rounded ${viewMode === "thumbnail" ? "bg-[#888888]" : "bg-[#1a1a1a]"} hover:bg-[#888888] transition-colors`}
+              title="Thumbnail view"
+            >
+              <FontAwesomeIcon icon={faImage} className="text-[10px]" />
+            </button>
+            <button
+              onClick={() => setViewMode("name")}
+              className={`p-1.5 rounded ${viewMode === "name" ? "bg-[#888888]" : "bg-[#1a1a1a]"} hover:bg-[#888888] transition-colors`}
+              title="Name view"
+            >
+              <FontAwesomeIcon icon={faFont} className="text-[10px]" />
+            </button>
+            <button
+              onClick={() => setViewMode("numbers")}
+              className={`p-1.5 rounded ${viewMode === "numbers" ? "bg-[#888888]" : "bg-[#1a1a1a]"} hover:bg-[#888888] transition-colors`}
+              title="Numbers view"
+            >
+              <FontAwesomeIcon icon={faHashtag} className="text-[10px]" />
+            </button>
+          </div>
+        </div>
         {totalEpisodes > 100 && (
           <div className="w-full flex gap-x-4 items-center max-[1200px]:justify-between">
             <div className="min-w-fit flex text-[13px]">
@@ -201,8 +275,10 @@ function Episodelist({
       <div ref={listContainerRef} className="w-full h-full overflow-y-auto">
         <div
           className={`${
-            totalEpisodes > 30
+            viewMode === "numbers" && totalEpisodes > 30
               ? "p-3 grid grid-cols-5 gap-1 max-[1200px]:grid-cols-12 max-[860px]:grid-cols-10 max-[575px]:grid-cols-8 max-[478px]:grid-cols-6 max-[350px]:grid-cols-5"
+              : viewMode === "thumbnail"
+              ? "p-3 flex flex-col gap-2"
               : ""
           }`}
         >
@@ -216,6 +292,61 @@ function Episodelist({
                     currentEpisode === episodeNumber;
                   const isSearched = searchedEpisode === item?.id;
 
+                  // Thumbnail View
+                  if (viewMode === "thumbnail") {
+                    const thumbnail = episodeThumbnails[parseInt(episodeNumber)] || 'https://via.placeholder.com/300x170?text=No+Image';
+                    return (
+                      <div
+                        key={item?.id}
+                        ref={isActive ? activeEpisodeRef : null}
+                        className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer ${
+                          item?.filler ? "border-2 border-yellow-500" : ""
+                        } ${
+                          isActive ? "bg-[#888888]" : "bg-[#1a1a1a] hover:bg-[#2a2a2a]"
+                        } transition-colors`}
+                        onClick={() => {
+                          if (episodeNumber) {
+                            onEpisodeClick(episodeNumber);
+                            setActiveEpisodeId(episodeNumber);
+                            setSearchedEpisode(null);
+                          }
+                        }}
+                      >
+                        <img src={thumbnail} alt={`Episode ${episodeNumber}`} className="w-20 h-12 object-cover rounded" />
+                        <div className="flex-1">
+                          <p className="text-xs font-semibold text-white">Episode {episodeNumber}</p>
+                          <p className="text-[10px] text-gray-400 line-clamp-1">{item?.title || 'No title'}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  // Name View
+                  if (viewMode === "name") {
+                    return (
+                      <div
+                        key={item?.id}
+                        ref={isActive ? activeEpisodeRef : null}
+                        className={`flex items-center gap-2 p-2 rounded cursor-pointer ${
+                          item?.filler ? "bg-yellow-700 text-white" : ""
+                        } ${
+                          isActive && !item?.filler ? "bg-[#888888] text-white" : !item?.filler ? "bg-[#1a1a1a] hover:bg-[#2a2a2a] text-gray-300" : ""
+                        } transition-colors`}
+                        onClick={() => {
+                          if (episodeNumber) {
+                            onEpisodeClick(episodeNumber);
+                            setActiveEpisodeId(episodeNumber);
+                            setSearchedEpisode(null);
+                          }
+                        }}
+                      >
+                        <span className="text-xs font-bold min-w-[30px]">{episodeNumber}</span>
+                        <p className="text-xs line-clamp-1 flex-1">{item?.title || `Episode ${episodeNumber}`}</p>
+                      </div>
+                    );
+                  }
+                  
+                  // Numbers View (default)
                   return (
                     <div
                       key={item?.id}
@@ -223,15 +354,15 @@ function Episodelist({
                       className={`flex items-center justify-center rounded-[3px] h-[30px] text-[13.5px] font-medium cursor-pointer group ${
                         item?.filler
                           ? isActive
-                            ? "bg-[#ffbade]"
-                            : "bg-gradient-to-r from-[#5a4944] to-[#645a4b]"
+                            ? "bg-yellow-600"
+                            : "bg-yellow-700"
                           : ""
                       } md:hover:bg-[#67686F] 
                           md:hover:text-white
                        ${
-                         isActive
-                           ? "bg-[#ffbade] text-black"
-                           : "bg-[#35373D] text-gray-400"
+                         isActive && !item?.filler
+                           ? "bg-[#888888] text-white"
+                           : !item?.filler ? "bg-[#35373D] text-gray-400" : "text-white"
                        } ${isSearched ? "glow-animation" : ""} `}
                       onClick={() => {
                         if (episodeNumber) {
@@ -244,7 +375,7 @@ function Episodelist({
                       <span
                         className={`${
                           item?.filler
-                            ? "text-white md:group-hover:text-[#ffbade]"
+                            ? "text-white md:group-hover:text-white"
                             : ""
                         }`}
                       >
@@ -269,7 +400,7 @@ function Episodelist({
                         ? "bg-[#201F2D] text-gray-400"
                         : "bg-none"
                     } group md:hover:bg-[#2B2A42] ${
-                      isActive ? "text-[#ffbade] bg-[#2B2A42]" : ""
+                      isActive ? "text-[#888888] bg-[#2B2A42]" : ""
                     } ${isSearched ? "glow-animation" : ""}`}
                     onClick={() => {
                       if (episodeNumber) {
@@ -281,13 +412,13 @@ function Episodelist({
                   >
                     <p className="text-[14px] font-medium">{index + 1}</p>
                     <div className="w-full flex items-center justify-between gap-x-[5px]">
-                      <h1 className="line-clamp-1 text-[15px] font-light group-hover:text-[#ffbade]">
+                      <h1 className="line-clamp-1 text-[15px] font-light group-hover:text-white">
                         {language === "EN" ? item?.title : item?.japanese_title}
                       </h1>
                       {isActive && (
                         <FontAwesomeIcon
                           icon={faCirclePlay}
-                          className="w-[20px] h-[20px] text-[#ffbade]"
+                          className="w-[20px] h-[20px] text-white"
                         />
                       )}
                     </div>

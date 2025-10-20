@@ -32,7 +32,7 @@ function InfoItem({ label, value, isProducer = true }) {
                     .join("-")
                     .replace(/-+/g, "-")}`}
                   key={index}
-                  className="cursor-pointer hover:text-[#ffbade]"
+                  className="cursor-pointer hover:text-white"
                 >
                   {item}
                   {index < value.length - 1 && ", "}
@@ -66,13 +66,11 @@ function InfoItem({ label, value, isProducer = true }) {
 function Tag({ bgColor, index, icon, text }) {
   return (
     <div
-      className={`flex space-x-1 justify-center items-center px-[4px] py-[1px] text-black font-bold text-[13px] ${
-        index === 0 ? "rounded-l-[4px]" : "rounded-none"
-      }`}
+      className="flex space-x-1 justify-center items-center px-2 py-1 text-black font-bold text-xs rounded-full"
       style={{ backgroundColor: bgColor }}
     >
-      {icon && <FontAwesomeIcon icon={icon} className="text-[12px]" />}
-      <p className="text-[12px]">{text}</p>
+      {icon && <FontAwesomeIcon icon={icon} className="text-[10px]" />}
+      <p className="text-[11px]">{text}</p>
     </div>
   );
 }
@@ -161,8 +159,8 @@ function AnimeInfo({ random = false }) {
           alt={`${title} Poster`}
           className="absolute inset-0 object-cover w-full h-full filter grayscale blur-lg z-[-900]"
         />
-        <div className="flex items-start z-10 px-14 py-[70px] bg-[#252434] bg-opacity-70 gap-x-8 max-[1024px]:px-6 max-[1024px]:py-10 max-[1024px]:gap-x-4 max-[575px]:flex-col max-[575px]:items-center max-[575px]:justify-center">
-          <div className="relative w-[180px] h-[270px] max-[575px]:w-[140px] max-[575px]:h-[200px] flex-shrink-0">
+        <div className="flex items-start z-10 px-14 py-[70px] bg-black bg-opacity-80 gap-x-8 max-[1024px]:px-6 max-[1024px]:py-10 max-[1024px]:gap-x-4 max-[575px]:flex-col max-[575px]:items-center max-[575px]:justify-center">
+          <div className="relative w-[180px] h-[270px] max-[575px]:w-[140px] max-[575px]:h-[200px] flex-shrink-0 rounded-xl overflow-hidden">
             <img
               src={`${poster}`}
               alt={`${title} Poster`}
@@ -183,7 +181,7 @@ function AnimeInfo({ random = false }) {
                 <li key={index} className="flex gap-x-3 items-center">
                   <Link
                     to={`/${link}`}
-                    className="text-white hover:text-[#FFBADE] text-[15px] font-semibold"
+                    className="text-gray-400 hover:text-white text-[15px] font-semibold transition-colors"
                   >
                     {text}
                   </Link>
@@ -228,20 +226,20 @@ function AnimeInfo({ random = false }) {
             {animeInfo?.animeInfo?.Status?.toLowerCase() !== "not-yet-aired" ? (
               <Link
                 to={`/watch/${animeInfo.id}`}
-                className="flex gap-x-2 px-6 py-2 bg-[#FFBADE] w-fit text-black items-center rounded-3xl mt-5"
+                className="flex gap-x-2 px-8 py-3 bg-white w-fit text-black items-center rounded-full mt-5 font-semibold hover:bg-gray-200 hover:scale-105 transition-all duration-300"
               >
                 <FontAwesomeIcon
                   icon={faPlay}
-                  className="text-[14px] mt-[1px]"
+                  className="text-[12px]"
                 />
-                <p className="text-lg font-medium">Watch Now</p>
+                <p className="text-sm">Watch Now</p>
               </Link>
             ) : (
               <Link
                 to={`/${animeInfo.id}`}
-                className="flex gap-x-2 px-6 py-2 bg-[#FFBADE] w-fit text-black items-center rounded-3xl mt-5"
+                className="flex gap-x-2 px-8 py-3 bg-gray-700 w-fit text-white items-center rounded-full mt-5 font-semibold"
               >
-                <p className="text-lg font-medium">Not released</p>
+                <p className="text-sm">Not released</p>
               </Link>
             )}
             {info?.Overview && (
@@ -277,7 +275,7 @@ function AnimeInfo({ random = false }) {
                 className="w-[60px] h-auto rounded-full max-[1024px]:w-[40px]"
               />
               <div className="flex flex-col w-fit">
-                <p className="text-[15px] font-bold text-[#FFBADE]">
+                <p className="text-[15px] font-bold text-white">
                   Share Anime
                 </p>
                 <p className="text-[16px] text-white">to your friends</p>
@@ -285,7 +283,7 @@ function AnimeInfo({ random = false }) {
             </div>
           </div>
         </div>
-        <div className="bg-[#4c4b57c3] flex items-center px-8 max-[1200px]:py-10 max-[1200px]:bg-[#363544e0] max-[575px]:p-4">
+        <div className="bg-[#1a1a1a] flex items-center px-8 max-[1200px]:py-10 max-[575px]:p-4 rounded-xl">
           <div className="w-full flex flex-col h-fit gap-y-3">
             {info?.Overview && (
               <div className="custom-xl:hidden max-h-[150px] overflow-hidden">
@@ -319,7 +317,7 @@ function AnimeInfo({ random = false }) {
                     <Link
                       to={`/genre/${genre.split(" ").join("-")}`}
                       key={index}
-                      className="text-[14px] font-semibold px-2 py-[1px] border border-gray-400 rounded-2xl hover:text-[#ffbade]"
+                      className="text-[14px] font-semibold px-3 py-1 bg-[#2a2a2a] rounded-full hover:bg-white hover:text-black transition-all duration-300"
                     >
                       {genre}
                     </Link>
@@ -347,7 +345,7 @@ function AnimeInfo({ random = false }) {
         <div>
           {seasons?.length > 0 && (
             <div className="flex flex-col gap-y-7 mt-8">
-              <h1 className="w-fit text-2xl text-[#ffbade] max-[478px]:text-[18px] font-bold">
+              <h1 className="w-fit text-xl text-white max-[478px]:text-[18px] font-bold">
                 More Seasons
               </h1>
               <div className="flex flex-wrap gap-4 max-[575px]:grid max-[575px]:grid-cols-3 max-[575px]:gap-3 max-[480px]:grid-cols-2">
@@ -355,16 +353,16 @@ function AnimeInfo({ random = false }) {
                   <Link
                     to={`/${season.id}`}
                     key={index}
-                    className={`relative w-[20%] h-[60px] rounded-lg overflow-hidden cursor-pointer group ${
+                    className={`relative w-[20%] h-[60px] rounded-xl overflow-hidden cursor-pointer group hover:scale-105 transition-transform duration-300 ${
                       currentId === String(season.id)
-                        ? "border border-[#ffbade]"
+                        ? "ring-2 ring-white"
                         : ""
                     } max-[1200px]:w-[140px] max-[575px]:w-full`}
                   >
                     <p
-                      className={`text-[13px] text-center font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-2 z-30 line-clamp-2 group-hover:text-[#ffbade] ${
+                      className={`text-[13px] text-center font-bold absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-2 z-30 line-clamp-2 group-hover:text-gray-300 transition-colors ${
                         currentId === String(season.id)
-                          ? "text-[#ffbade]"
+                          ? "text-white"
                           : "text-white"
                       }`}
                     >

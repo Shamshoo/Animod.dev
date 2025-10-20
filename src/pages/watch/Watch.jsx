@@ -237,17 +237,7 @@ export default function Watch() {
   }, [animeId, animeInfo]);
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center relative">
-      <div className="w-full relative max-[1400px]:px-[30px] max-[1200px]:px-[80px] max-[1024px]:px-0">
-        <img
-          src={
-            !animeInfoLoading
-              ? `${animeInfo?.poster}`
-              : "https://i.postimg.cc/rFZnx5tQ/2-Kn-Kzog-md.webp"
-          }
-          alt={`${animeInfo?.title} Poster`}
-          className="absolute inset-0 w-full h-full object-cover filter grayscale z-[-900]"
-        />
-        <div className="absolute inset-0 bg-[#3a3948] bg-opacity-80 backdrop-blur-md z-[-800]"></div>
+      <div className="w-full relative max-[1400px]:px-[30px] max-[1200px]:px-[80px] max-[1024px]:px-0 bg-black">
         <div className="relative z-10 px-4 pb-[50px] grid grid-cols-[minmax(0,75%),minmax(0,25%)] w-full h-full mt-[128px] max-[1400px]:flex max-[1400px]:flex-col max-[1200px]:mt-[64px] max-[1024px]:px-0 max-md:mt-[50px]">
           {animeInfo && (
             <ul className="flex absolute left-4 top-[-40px] gap-x-2 items-center w-fit max-[1200px]:hidden">
@@ -258,7 +248,7 @@ export default function Watch() {
                 <li key={index} className="flex gap-x-3 items-center">
                   <Link
                     to={`/${link}`}
-                    className="text-white hover:text-[#FFBADE] text-[15px] font-semibold"
+                    className="text-gray-400 hover:text-white text-[15px] font-semibold transition-colors"
                   >
                     {text}
                   </Link>
@@ -273,19 +263,7 @@ export default function Watch() {
               </p>
             </ul>
           )}
-          <div className="flex w-full min-h-fit max-[1200px]:flex-col-reverse">
-            <div className="episodes w-[35%] bg-[#191826] flex justify-center items-center max-[1400px]:w-[380px] max-[1200px]:w-full max-[1200px]:h-full max-[1200px]:min-h-[100px]">
-              {!episodes ? (
-                <BouncingLoader />
-              ) : (
-                <Episodelist
-                  episodes={episodes}
-                  currentEpisode={episodeId}
-                  onEpisodeClick={(id) => setEpisodeId(id)}
-                  totalEpisodes={totalEpisodes}
-                />
-              )}
-            </div>
+          <div className="flex w-full min-h-fit gap-x-4 max-[1200px]:flex-col-reverse">
             <div className="player w-full h-fit bg-black flex flex-col">
               <div className="w-full relative h-[480px] max-[1400px]:h-[40vw] max-[1200px]:h-[48vw] max-[1024px]:h-[58vw] max-[600px]:h-[65vw]">
                 {!buffering ? (
@@ -351,7 +329,7 @@ export default function Watch() {
                 serverLoading={serverLoading}
               />
               {seasons?.length > 0 && (
-                <div className="flex flex-col gap-y-2 bg-[#11101A] p-4">
+                <div className="flex flex-col gap-y-2 bg-[#0a0a0a] p-4 rounded-xl mt-4">
                   <h1 className="w-fit text-lg max-[478px]:text-[18px] font-semibold">
                     Watch more seasons of this anime
                   </h1>
@@ -386,8 +364,21 @@ export default function Watch() {
                   </div>
                 </div>
               )}
-              {nextEpisodeSchedule?.nextEpisodeSchedule &&
-                showNextEpisodeSchedule && (
+            </div>
+            <div className="episodes w-[280px] bg-[#0a0a0a] flex flex-col justify-start items-center max-[1200px]:w-full max-[1200px]:h-full max-[1200px]:min-h-[100px] rounded-xl flex-shrink-0">
+              {!episodes ? (
+                <BouncingLoader />
+              ) : (
+                <Episodelist
+                  episodes={episodes}
+                  currentEpisode={episodeId}
+                  onEpisodeClick={(id) => setEpisodeId(id)}
+                  totalEpisodes={totalEpisodes}
+                />
+              )}
+            </div>
+          </div>
+          {nextEpisodeSchedule?.nextEpisodeSchedule && showNextEpisodeSchedule && (
                   <div className="p-4">
                     <div className="w-full px-4 rounded-md bg-[#0088CC] flex items-center justify-between gap-x-2">
                       <div className="w-full h-fit">
@@ -419,8 +410,6 @@ export default function Watch() {
                     </div>
                   </div>
                 )}
-            </div>
-          </div>
           <div className="flex flex-col gap-y-4 items-start ml-8 max-[1400px]:ml-0 max-[1400px]:mt-10 max-[1400px]:flex-row max-[1400px]:gap-x-6 max-[1024px]:px-[30px] max-[1024px]:mt-8 max-[500px]:mt-4 max-[500px]:px-4">
             {animeInfo && animeInfo?.poster ? (
               <img
@@ -522,7 +511,7 @@ export default function Watch() {
               </p>
               <Link
                 to={`/${animeId}`}
-                className="w-fit text-[13px] bg-white rounded-[12px] px-[10px] py-1 text-black"
+                className="w-fit text-[13px] bg-white rounded-full px-4 py-2 text-black font-semibold hover:bg-gray-200 transition-all duration-300"
               >
                 View detail
               </Link>
@@ -530,14 +519,14 @@ export default function Watch() {
           </div>
         </div>
       </div>
-      <div className="w-full flex gap-x-4 items-center bg-[#191826] p-5 max-[575px]:px-3 max-[320px]:hidden">
+      <div className="w-full flex gap-x-4 items-center bg-[#0a0a0a] p-5 max-[575px]:px-3 max-[320px]:hidden">
         <img
           src="https://i.postimg.cc/d34WWyNQ/share-icon.gif"
           alt="Share Anime"
           className="w-[60px] h-auto rounded-full max-[1024px]:w-[40px] max-[575px]:hidden"
         />
         <div className="flex flex-col w-fit">
-          <p className="text-[15px] font-bold text-[#FFBADE]">Share Anime</p>
+          <p className="text-[15px] font-bold text-white">Share Anime</p>
           <p className="text-[16px] text-white">to your friends</p>
         </div>
       </div>
